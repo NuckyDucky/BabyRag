@@ -28,7 +28,7 @@ _Preinstall: Configure your AMD hardware. For NPU users, this means rebooting in
 7. Finally, select apply changes and restart.
 
 ## 🚀 Usage
-Start the server and upload your files, similar to how you would with superbooga/''V2. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
+Start the server and upload your files, similar to how you would with superbooga. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
 
 ### Load a Model
 If you're using an AMD NPU, consider a model with these parameters for reasonable generation times.
