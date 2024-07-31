@@ -37,5 +37,9 @@ Once the extension loads, navigate to the chat page. Under 'Generate' you'll see
 Select your file and hit: Load Data
 From there, make sure you have 'chat' selected (may not work with chat-instruct or instruct) and begin talking.
 
+## Load Data 
+
+Load Data lets you parse your embeddings as a .json. This is helpful if you find a file isn't parsing properly.
+![image](https://github.com/user-attachments/assets/0a3ed221-aec7-4ae2-aa58-459cfe70c5ab)
 
 
