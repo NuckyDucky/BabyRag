@@ -50,3 +50,7 @@ Load Data lets you parse your embeddings as a `.json`. This is helpful if you fi
 
 ## 🧠 Model Zoo
 [Try Out A Model Today](https://huggingface.co/)
+
+## Known Issues
+1. Sometimes the web-UI restarts too fast, this can cause multiple gradio instances which will conflict and throw errors. To avoid this, just ctrl+c the terminal and restart the server.
+2. The data parsing is inefficent due to using cosign similarity and it being unoptimized. If a file is taking a while to load, consider lowering the context for now. In a future update I will be incorporating a smarter comparison feature.
