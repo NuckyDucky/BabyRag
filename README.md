@@ -17,9 +17,9 @@ Welcome to BabyRag, a submission for the AMD Hackster.io Pervasive AI Contest 20
 - Other dependencies listed in `requirements.txt`
 
 ## Installation Instructions
-1. Clone the repository: `git clone https://github.com/your-repository/BabyRag.git`
+1. Clone the repository in your extensions folder: `git clone https://github.com/your-repository/BabyRag.git`
 2. Install required Python packages: `pip install -r requirements.txt`
-3. Configure your AMD hardware as per the guidelines provided in the `hardware_setup.md` document.
+3. Configure your AMD hardware. For NPU users, this means rebooting into UEFI and enabling the NPU.
 
 ## Usage
 To start the server and upload your files, very similarly to how you would do with superbooga/''V2. You don't need to fetch your data, but if you do it generates a cool json with your embeddings. Oobabooga's Web-UI has custom chat generation
