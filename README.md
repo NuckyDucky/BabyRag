@@ -33,6 +33,7 @@ only work for 'chat' mode, but I plan to expand this as I become more familiar w
 Load a model: If you're following along with an AMD NPU, consider using a model with these parameters to keep generation time reasonable.
 ![image](https://github.com/user-attachments/assets/61907668-6d46-4989-9b61-feebb8a38b52)
 
+I would also keep your file size at most 100k if you're not using a GPU or have any type of GPU accelleration. The model attempts to preprocess your text but summarizing it yourself or getting another GPT to could give quicker generations but possibly at the risk of lowered performance.
 
 Once the extension loads, navigate to the chat page. Under 'Generate' you'll see:
 ![image](https://github.com/user-attachments/assets/be48a231-a705-4904-af8d-73b4692d102d)
