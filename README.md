@@ -28,7 +28,7 @@ _Preinstall: Configure your AMD hardware. For NPU users, this means rebooting in
 7. Finally, select apply changes and restart.
 
 ## 🚀 Usage
-Start the server and upload your files, similar to how you would with superbooga. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
+Start the server and upload your files, similar to how you would with superboogav2. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
 
 ### Load a Model
 If you're using an AMD NPU, consider a model with these parameters for reasonable generation times.
@@ -51,6 +51,12 @@ Load Data lets you parse your embeddings as a `.json`. This is helpful if you fi
 ## 🧠 Model Zoo
 [Try Out A Model Today](https://huggingface.co/)
 
-## Known Issues
-1. Sometimes the web-UI restarts too fast, this can cause multiple gradio instances which will conflict and throw errors. To avoid this, just ctrl+c the terminal and restart the server.
-2. The data parsing is inefficent due to using cosign similarity and it being unoptimized. If a file is taking a while to load, consider lowering the context for now. In a future update I will be incorporating a smarter comparison feature.
+## 🐞 Known Issues
+1. Sometimes the web-UI restarts too fast, causing multiple Gradio instances to conflict and throw errors. To avoid this, press `Ctrl+C` in the terminal and restart the server.
+2. The data parsing is inefficient due to using cosine similarity and being unoptimized. If a file takes a while to load, consider lowering the context size for now. Future updates will include a smarter comparison feature.
+
+## 🙌 Special Thanks
+- **AMD and Hackster.io** for sponsoring this contest!
+- **Oobabooga** for making this web-UI so easy to work with.
+- **FuriousPandas** 🐼 for teaching me everything I know about Python.
+- **My Wonderful Husband**, whose unwavering support helped me get through this project with ease. ❤️
