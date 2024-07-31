@@ -1,7 +1,7 @@
 # BabyRag
 
 ## Introduction
-Welcome to BabyRag, a submission for the AMD Hackster.io Pervasive AI Contest 2023. This project is designed to create a coherent RAG (Retrieval-Augmented Generation) style infrastructure, inspired by the ambitions of superboogav2 for the Oobabooga Web-UI. Using cutting-edge AI and AMD’s powerful processing capabilities, BabyRag aims to enhance text processing applications with advanced text embedding and retrieval techniques.
+Welcome to BabyRag, part of my submission for the [AMD Hackster.io Pervasive AI Contest 2023 - AI.You](https://www.hackster.io/contests/amd2023/hardware_applications/17172). This project is designed to create a coherent RAG (Retrieval-Augmented Generation) style infrastructure, inspired by the ambitions of superboogav2 for the Oobabooga Web-UI. Using cutting-edge AI and AMD’s powerful processing capabilities, BabyRag aims to enhance text processing applications with advanced text embedding and retrieval techniques.
 
 ## Features
 - **Text Embedding and Retrieval**: Utilizes BERT models for generating and retrieving text embeddings.
@@ -17,6 +17,7 @@ Welcome to BabyRag, a submission for the AMD Hackster.io Pervasive AI Contest 20
 - Other dependencies listed in `requirements.txt`
 
 ## Installation Instructions
+Preinstall: Install [Oobabooga's text-generation-webUI](https://github.com/oobabooga/text-generation-webui).
 1. Clone the repository in your extensions folder: `git clone https://github.com/your-repository/BabyRag.git`
 2. Install required Python packages: `pip install -r requirements.txt`
 3. Configure your AMD hardware. For NPU users, this means rebooting into UEFI and enabling the NPU.
