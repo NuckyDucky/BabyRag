@@ -17,10 +17,10 @@ Welcome to BabyRag, part of my submission for the [AMD Hackster.io Pervasive AI 
 - Other dependencies listed in `requirements.txt`
 
 ## Installation Instructions
-Preinstall: Install [Oobabooga's text-generation-webUI](https://github.com/oobabooga/text-generation-webui).
-1. Clone the repository in your extensions folder: `git clone https://github.com/your-repository/BabyRag.git`
-2. Install required Python packages: `pip install -r requirements.txt`
-3. Configure your AMD hardware. For NPU users, this means rebooting into UEFI and enabling the NPU.
+Preinstall: Configure your AMD hardware. For NPU users, this means rebooting into UEFI and enabling the NPU.
+1. Install [Oobabooga's text-generation-webUI](https://github.com/oobabooga/text-generation-webui).
+2. Clone the repository in your extensions folder: `git clone https://github.com/your-repository/BabyRag.git`
+3. Install required Python packages: `pip install -r requirements.txt`
 
 ## Usage
 To start the server and upload your files, very similarly to how you would do with superbooga/''V2. You don't need to fetch your data, but if you do it generates a cool json with your embeddings. Oobabooga's Web-UI has custom chat generation
