@@ -31,6 +31,7 @@ To start the server and upload your files, very similarly to how you would do wi
 only work for 'chat' mode, but I plan to expand this as I become more familiar with the infrastructure.
 
 Once the extension loads, navigate to the chat page. Under 'Generate' you'll see:
+![image](https://github.com/user-attachments/assets/be48a231-a705-4904-af8d-73b4692d102d)
 ![image](https://github.com/user-attachments/assets/924b4704-5800-436f-b3af-0241b9084b4a)
 
 Select your file and hit: Load Data
