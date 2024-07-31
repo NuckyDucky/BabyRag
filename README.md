@@ -30,6 +30,10 @@ Preinstall: Configure your AMD hardware. For NPU users, this means rebooting int
 To start the server and upload your files, very similarly to how you would do with superbooga/''V2. You don't need to fetch your data, but if you do it generates a cool json with your embeddings. Oobabooga's Web-UI has custom chat generation
 only work for 'chat' mode, but I plan to expand this as I become more familiar with the infrastructure.
 
+Load a model: If you're following along with an AMD NPU, consider using a model with these parameters to keep generation time reasonable.
+![image](https://github.com/user-attachments/assets/61907668-6d46-4989-9b61-feebb8a38b52)
+
+
 Once the extension loads, navigate to the chat page. Under 'Generate' you'll see:
 ![image](https://github.com/user-attachments/assets/be48a231-a705-4904-af8d-73b4692d102d)
 ![image](https://github.com/user-attachments/assets/d2f2feb8-24c7-4c6c-a69f-605ee2be9189)
