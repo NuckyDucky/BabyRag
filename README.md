@@ -58,5 +58,5 @@ Load Data lets you parse your embeddings as a `.json`. This is helpful if you fi
 ## 🙌 Special Thanks
 - **AMD and Hackster.io** for sponsoring this contest!
 - **Oobabooga** for making this web-UI so easy to work with.
-- **FuriousPandas** 🐼 for teaching me everything I know about Python.
+- **FuriousPandas** 🐼 for teaching me everything I know.
 - **My Wonderful Husband**, whose unwavering support helped me get through this project with ease. ❤️
