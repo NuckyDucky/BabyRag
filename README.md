@@ -47,4 +47,5 @@ From there, make sure you have 'chat' selected (may not work with chat-instruct 
 Load Data lets you parse your embeddings as a .json. This is helpful if you find a file isn't parsing properly.
 ![image](https://github.com/user-attachments/assets/0a3ed221-aec7-4ae2-aa58-459cfe70c5ab)
 
-
+## Model Zoo
+[Try Out A Model Today](https://huggingface.co/)
