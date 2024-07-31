@@ -32,7 +32,7 @@ only work for 'chat' mode, but I plan to expand this as I become more familiar w
 
 Once the extension loads, navigate to the chat page. Under 'Generate' you'll see:
 ![image](https://github.com/user-attachments/assets/be48a231-a705-4904-af8d-73b4692d102d)
-![image](![image](https://github.com/user-attachments/assets/d2f2feb8-24c7-4c6c-a69f-605ee2be9189)
+![image](https://github.com/user-attachments/assets/d2f2feb8-24c7-4c6c-a69f-605ee2be9189)
 
 Select your file and hit: Load Data
 From there, make sure you have 'chat' selected (may not work with chat-instruct or instruct) and begin talking.
