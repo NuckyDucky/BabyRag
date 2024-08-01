@@ -60,3 +60,6 @@ Load Data lets you parse your embeddings as a `.json`. This is helpful if you fi
 - **Oobabooga** for making this web-UI so easy to work with.
 - **FuriousPandas** 🐼 for teaching me everything I know.
 - **My Wonderful Husband**, whose unwavering support helped me get through this project with ease. ❤️
+
+## Proof of Concept:
+![image](https://github.com/user-attachments/assets/8a918bc2-284b-47fe-815b-5543d5754371)
