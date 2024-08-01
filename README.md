@@ -30,6 +30,8 @@ _Preinstall: Configure your AMD hardware. For NPU users, this means rebooting in
 ## 🚀 Usage
 Start the server and upload your files, similar to how you would with superboogav2. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
 
+To emulate yourself, just upload a personal document containing a letter from you or written in your passive/active voice. Use your best roleplay model and ask it to immitate you and generate a letter/article etc. 
+
 ### Load a Model
 If you're using an AMD NPU, consider a model with these parameters for reasonable generation times.
 ![Model Parameters Image](https://github.com/user-attachments/assets/61907668-6d46-4989-9b61-feebb8a38b52)
