@@ -6,10 +6,11 @@ import PyPDF2
 import chardet
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer, AutoModel, RobertaTokenizerFast
 import logging
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import torch
 from modules import chat, shared
 from modules.text_generation import (
     decode,
@@ -43,6 +44,7 @@ params = {
     'return_length': False,
     'verbose': False,
     'use_fast': True,
+    'add_prefix_space': False,
 }
 
 model_choices = ['bert-base-uncased', 'roberta-base', 'distilbert-base-uncased', 'gpt2']
@@ -66,7 +68,11 @@ class PreprocessData:
 
 class TextEmbedding:
     def __init__(self, model_name):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=params['use_fast'])
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_fast=params['use_fast'],
+            add_prefix_space=params['add_prefix_space']
+        )
         self.model = AutoModel.from_pretrained(model_name)
 
     def get_embeddings(self, text):
@@ -189,7 +195,7 @@ def delete_embeddings_and_respond():
     result = delete_embeddings()
     return json.dumps(result)
 
-def apply_settings(model_name, chunk_length, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast):
+def apply_settings(model_name, chunk_length, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space):
     global params
     params['model_name'] = model_name
     params['chunk_length'] = int(chunk_length)
@@ -206,6 +212,7 @@ def apply_settings(model_name, chunk_length, truncation, padding, max_length, ba
     params['return_length'] = return_length
     params['verbose'] = verbose
     params['use_fast'] = use_fast
+    params['add_prefix_space'] = add_prefix_space
     yield f"The following settings are now active: {params}\n\n"
 
 def get_most_relevant_text(input_embedding, embeddings_data, top_n=1):
@@ -287,6 +294,7 @@ def ui():
                 return_length = gr.Checkbox(value=params['return_length'], label='Return length')
                 verbose = gr.Checkbox(value=params['verbose'], label='Verbose')
                 use_fast = gr.Checkbox(value=params['use_fast'], label='Use fast tokenizer')
+                add_prefix_space = gr.Checkbox(value=params['add_prefix_space'], label='Add prefix space')
                 update_settings = gr.Button('Apply changes')
 
             with gr.Tab("Manage Embeddings"):
@@ -296,7 +304,7 @@ def ui():
 
     update_file.click(feed_file_into_collector, [file_input, chunk_len, chunk_sep], last_updated, show_progress=False)
     fetch_embeddings_btn.click(fetch_embeddings, [], last_updated, show_progress=False)
-    update_settings.click(apply_settings, [model_name, chunk_len, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast], last_updated, show_progress=False)
+    update_settings.click(apply_settings, [model_name, chunk_len, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space], last_updated, show_progress=False)
     delete_embeddings_btn.click(delete_embeddings_and_respond, [], last_updated, show_progress=False)
 
 if __name__ == '__main__':
