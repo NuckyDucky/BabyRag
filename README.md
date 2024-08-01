@@ -24,7 +24,7 @@ _Preinstall: Configure your AMD hardware. For NPU users, this means rebooting in
 3. Activate the .env (usually `cmd_os.bat` for Windows users, `CMD_windows.bat`).
 4. Navigate to `extensions/BabyRag` and install required Python packages: `pip install -r requirements.txt`
 5. Reopen the webui at `localhost:7860`
-6. Navigate to the settings tab and make sure BabyRag is selected. Then select 'Save UI Defaults...' ![Settings Image](https://github.com/user-attachments/assets/8d846909-9177-496b-b22d-ada1910b56d0)
+6. Navigate to the settings tab and make sure BabyRag is selected. Then select 'Save UI Defaults...' ![Settings Image](https://github.com/user-attachments/assets/8d846909-9177-496b-b22d-ada1910b56d0) (I have openai and listen enabled so I can use this as a discord bot.)
 7. Finally, select apply changes and restart.
 
 ## 🚀 Usage
