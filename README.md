@@ -84,6 +84,7 @@ These settings provide fine-grained control over the tokenization process, enabl
 ## 🐞 Known Issues
 1. Sometimes the web-UI restarts too fast, causing multiple Gradio instances to conflict and throw errors. To avoid this, press `Ctrl+C` in the terminal and restart the server.
 2. The data parsing is inefficient due to using cosine similarity and being unoptimized. If a file takes a while to load, consider lowering the context size for now. Future updates will include a smarter comparison feature.
+3. RAG is extremely unreliable. What works for Claire Sander's work on Algae doesn't work for my EDS disease which also doesn't work for Clean Code. Over all, the manual tuning for each document needs to be addressed. I hope to investigate a generliazed solution.
 
 ## 🙌 Special Thanks
 - **AMD and Hackster.io** for sponsoring this contest!
