@@ -54,6 +54,17 @@ Load Data lets you parse your embeddings as a `.json`. This is helpful if you fi
 ## 🧠 Model Zoo
 [Try Out A Model Today](https://huggingface.co/)
 
+## 🔧 Tokenizing
+The BabyRag project includes advanced tokenizer features to enhance text preprocessing. Here is an explanation of each tokenizer setting:
+
+- **do_lower_case**: Converts all characters to lowercase before tokenization. Useful for models trained on lowercase data.
+- **strip_accents**: Removes accents and other diacritical marks from text. This can be set to `None` (no stripping), `True` (strip accents), or `False` (do not strip accents).
+- **do_basic_tokenize**: Determines whether to perform basic tokenization before applying wordpiece tokenization. Basic tokenization includes splitting text into words, handling punctuation, etc.
+- **never_split**: A list of tokens that should never be split during tokenization. Useful for keeping certain tokens intact.
+- **pad_token**: Specifies the token to be used for padding sequences to the same length. Commonly used pad tokens include `[PAD]`.
+
+These settings provide fine-grained control over the tokenization process, enabling more precise and effective text preprocessing.
+
 ## 🐞 Known Issues
 1. Sometimes the web-UI restarts too fast, causing multiple Gradio instances to conflict and throw errors. To avoid this, press `Ctrl+C` in the terminal and restart the server.
 2. The data parsing is inefficient due to using cosine similarity and being unoptimized. If a file takes a while to load, consider lowering the context size for now. Future updates will include a smarter comparison feature.
