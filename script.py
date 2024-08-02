@@ -6,7 +6,7 @@ import PyPDF2
 import chardet
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
-from transformers import AutoTokenizer, AutoModel, RobertaTokenizerFast
+from transformers import AutoTokenizer, AutoModel
 import logging
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
@@ -17,7 +17,6 @@ from modules.text_generation import (
     encode,
     generate_reply,
 )
-
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'extensions/baby_rag/uploads'
@@ -45,6 +44,11 @@ params = {
     'verbose': False,
     'use_fast': True,
     'add_prefix_space': False,
+    'do_lower_case': True,
+    'strip_accents': None,
+    'do_basic_tokenize': True,
+    'never_split': None,
+    'pad_token': '[PAD]',
 }
 
 model_choices = ['bert-base-uncased', 'roberta-base', 'distilbert-base-uncased', 'gpt2']
@@ -71,7 +75,12 @@ class TextEmbedding:
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name,
             use_fast=params['use_fast'],
-            add_prefix_space=params['add_prefix_space']
+            add_prefix_space=params['add_prefix_space'],
+            do_lower_case=params['do_lower_case'],
+            strip_accents=params['strip_accents'],
+            do_basic_tokenize=params['do_basic_tokenize'],
+            never_split=params['never_split'],
+            pad_token=params['pad_token']
         )
         self.model = AutoModel.from_pretrained(model_name)
 
@@ -195,7 +204,7 @@ def delete_embeddings_and_respond():
     result = delete_embeddings()
     return json.dumps(result)
 
-def apply_settings(model_name, chunk_length, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space):
+def apply_settings(model_name, chunk_length, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space, do_lower_case, strip_accents, do_basic_tokenize, never_split, pad_token):
     global params
     params['model_name'] = model_name
     params['chunk_length'] = int(chunk_length)
@@ -213,6 +222,11 @@ def apply_settings(model_name, chunk_length, truncation, padding, max_length, ba
     params['verbose'] = verbose
     params['use_fast'] = use_fast
     params['add_prefix_space'] = add_prefix_space
+    params['do_lower_case'] = do_lower_case
+    params['strip_accents'] = strip_accents
+    params['do_basic_tokenize'] = do_basic_tokenize
+    params['never_split'] = never_split
+    params['pad_token'] = pad_token
     yield f"The following settings are now active: {params}\n\n"
 
 def get_most_relevant_text(input_embedding, embeddings_data, top_n=1):
@@ -295,6 +309,11 @@ def ui():
                 verbose = gr.Checkbox(value=params['verbose'], label='Verbose')
                 use_fast = gr.Checkbox(value=params['use_fast'], label='Use fast tokenizer')
                 add_prefix_space = gr.Checkbox(value=params['add_prefix_space'], label='Add prefix space')
+                do_lower_case = gr.Checkbox(value=params['do_lower_case'], label='Do lower case')
+                strip_accents = gr.Checkbox(value=params['strip_accents'], label='Strip accents')
+                do_basic_tokenize = gr.Checkbox(value=params['do_basic_tokenize'], label='Do basic tokenize')
+                never_split = gr.Textbox(value='', label='Never split', info='List of tokens to never split, separated by spaces.')
+                pad_token = gr.Textbox(value=params['pad_token'], label='Pad token', info='Token to be used for padding.')
                 update_settings = gr.Button('Apply changes')
 
             with gr.Tab("Manage Embeddings"):
@@ -304,7 +323,7 @@ def ui():
 
     update_file.click(feed_file_into_collector, [file_input, chunk_len, chunk_sep], last_updated, show_progress=False)
     fetch_embeddings_btn.click(fetch_embeddings, [], last_updated, show_progress=False)
-    update_settings.click(apply_settings, [model_name, chunk_len, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space], last_updated, show_progress=False)
+    update_settings.click(apply_settings, [model_name, chunk_len, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space, do_lower_case, strip_accents, do_basic_tokenize, never_split, pad_token], last_updated, show_progress=False)
     delete_embeddings_btn.click(delete_embeddings_and_respond, [], last_updated, show_progress=False)
 
 if __name__ == '__main__':
