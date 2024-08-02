@@ -7,6 +7,7 @@ Welcome to **BabyRag**, part of my submission for the Hackster.io AMD Pervasive 
 - **📝 Text Embedding and Retrieval**: Utilizes BERT models for generating and retrieving text embeddings.
 - **💻 Enhanced Interaction**: Implements a Flask-based web interface for dynamic interaction with the AI.
 - **⚡ Real-time Processing**: Leverages the computing power of AMD hardware for efficient data handling and processing.
+- **🔧 Advanced Tokenizer Features**: Supports advanced tokenizer features like lowercasing, stripping accents, basic tokenization control, custom token splits, and padding tokens.
 
 ## 🛠️ Hardware and Software Requirements
 ### 🖥️ Hardware:
@@ -30,7 +31,7 @@ _Preinstall: Configure your AMD hardware. For NPU users, this means rebooting in
 ## 🚀 Usage
 Start the server and upload your files, similar to how you would with superboogav2. You don't need to fetch your data, but if you do, it generates a cool JSON with your embeddings. Oobabooga's Web-UI has custom chat generation that only works for 'chat' mode, but this will expand as familiarity with the infrastructure grows.
 
-To emulate yourself, just upload a personal document containing a letter from you or written in your passive/active voice. Use your best roleplay model and ask it to immitate you and generate a letter/article etc. 
+To emulate yourself, just upload a personal document containing a letter from you or written in your passive/active voice. Use your best roleplay model and ask it to imitate you and generate a letter/article etc.
 
 ### Load a Model
 If you're using an AMD NPU, consider a model with these parameters for reasonable generation times.
