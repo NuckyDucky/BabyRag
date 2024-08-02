@@ -93,3 +93,5 @@ These settings provide fine-grained control over the tokenization process, enabl
 
 ## Proof of Concept:
 ![image](https://github.com/user-attachments/assets/8a918bc2-284b-47fe-815b-5543d5754371)
+![image](https://github.com/user-attachments/assets/fa69a05e-d81f-45b0-af31-fcfd2c659f34)
+
