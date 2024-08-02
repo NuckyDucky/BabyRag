@@ -17,7 +17,6 @@ from modules.text_generation import (
     encode,
     generate_reply,
 )
-
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'extensions/baby_rag/uploads'
@@ -31,7 +30,29 @@ if not os.path.exists(UPLOAD_FOLDER):
 params = {
     'model_name': 'bert-base-uncased',
     'chunk_length': 700,
+    'truncation': True,
+    'padding': True,
+    'max_length': 512,
+    'batch_size': 8,
+    'return_tensors': 'pt',
+    'add_special_tokens': True,
+    'stride': 0,
+    'is_split_into_words': False,
+    'return_attention_mask': True,
+    'return_token_type_ids': True,
+    'return_length': False,
+    'verbose': False,
+    'use_fast': True,
+    'add_prefix_space': False,
+    'do_lower_case': True,
+    'strip_accents': None,
+    'do_basic_tokenize': True,
+    'never_split': None,
+    'pad_token': '[PAD]',
 }
+
+model_choices = ['bert-base-uncased', 'roberta-base', 'distilbert-base-uncased', 'gpt2']
+tensor_choices = ['pt', 'tf', 'np']
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -51,11 +72,33 @@ class PreprocessData:
 
 class TextEmbedding:
     def __init__(self, model_name):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_fast=params['use_fast'],
+            add_prefix_space=params['add_prefix_space'],
+            do_lower_case=params['do_lower_case'],
+            strip_accents=params['strip_accents'],
+            do_basic_tokenize=params['do_basic_tokenize'],
+            never_split=params['never_split'],
+            pad_token=params['pad_token']
+        )
         self.model = AutoModel.from_pretrained(model_name)
 
     def get_embeddings(self, text):
-        inputs = self.tokenizer(text, return_tensors='pt', truncation=True, padding=True)
+        inputs = self.tokenizer(
+            text,
+            return_tensors=params['return_tensors'],
+            truncation=params['truncation'],
+            padding=params['padding'],
+            max_length=params['max_length'],
+            add_special_tokens=params['add_special_tokens'],
+            stride=params['stride'],
+            is_split_into_words=params['is_split_into_words'],
+            return_attention_mask=params['return_attention_mask'],
+            return_token_type_ids=params['return_token_type_ids'],
+            return_length=params['return_length'],
+            verbose=params['verbose']
+        )
         outputs = self.model(**inputs)
         embeddings = outputs.last_hidden_state.mean(dim=1).detach().numpy().tolist()
         return embeddings
@@ -67,12 +110,10 @@ def save_embeddings_locally(embeddings, text, file_path=EMBEDDINGS_FILE):
     else:
         data = {"embeddings": []}
 
-    # Suspected error in how embeddings are added to the data structure
     data['embeddings'].append({"text": text, "embedding": embeddings[0]})
 
     with open(file_path, 'w') as f:
         json.dump(data, f)
-
 
 def load_embeddings(file_path=EMBEDDINGS_FILE):
     if os.path.exists(file_path):
@@ -81,6 +122,12 @@ def load_embeddings(file_path=EMBEDDINGS_FILE):
         return data
     else:
         return {"embeddings": []}
+
+def delete_embeddings(file_path=EMBEDDINGS_FILE):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return {"message": "Embeddings file deleted."}
+    return {"error": "Embeddings file not found."}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -153,10 +200,33 @@ def fetch_embeddings():
 
     yield f"Fetched embeddings: {embeddings_data}\n\n"
 
+def delete_embeddings_and_respond():
+    result = delete_embeddings()
+    return json.dumps(result)
 
-def apply_settings(chunk_length):
+def apply_settings(model_name, chunk_length, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space, do_lower_case, strip_accents, do_basic_tokenize, never_split, pad_token):
     global params
+    params['model_name'] = model_name
     params['chunk_length'] = int(chunk_length)
+    params['truncation'] = truncation
+    params['padding'] = padding
+    params['max_length'] = int(max_length)
+    params['batch_size'] = int(batch_size)
+    params['return_tensors'] = return_tensors
+    params['add_special_tokens'] = add_special_tokens
+    params['stride'] = int(stride)
+    params['is_split_into_words'] = is_split_into_words
+    params['return_attention_mask'] = return_attention_mask
+    params['return_token_type_ids'] = return_token_type_ids
+    params['return_length'] = return_length
+    params['verbose'] = verbose
+    params['use_fast'] = use_fast
+    params['add_prefix_space'] = add_prefix_space
+    params['do_lower_case'] = do_lower_case
+    params['strip_accents'] = strip_accents
+    params['do_basic_tokenize'] = do_basic_tokenize
+    params['never_split'] = never_split
+    params['pad_token'] = pad_token
     yield f"The following settings are now active: {params}\n\n"
 
 def get_most_relevant_text(input_embedding, embeddings_data, top_n=1):
@@ -178,7 +248,6 @@ def get_most_relevant_text(input_embedding, embeddings_data, top_n=1):
     except Exception as e:
         print(f"Error processing embeddings: {e}")
         return []
-
 
 def custom_generate_chat_prompt(user_input, state, **kwargs):
     """
@@ -224,14 +293,38 @@ def ui():
                 fetch_embeddings_btn = gr.Button('Fetch embeddings')
 
             with gr.Tab("Settings"):
+                model_name = gr.Dropdown(choices=model_choices, value=params['model_name'], label='Model name')
                 chunk_len = gr.Number(value=params['chunk_length'], label='Chunk length')
+                truncation = gr.Checkbox(value=params['truncation'], label='Truncation')
+                padding = gr.Checkbox(value=params['padding'], label='Padding')
+                max_length = gr.Number(value=params['max_length'], label='Max length')
+                batch_size = gr.Number(value=params['batch_size'], label='Batch size')
+                return_tensors = gr.Dropdown(choices=tensor_choices, value=params['return_tensors'], label='Return tensors')
+                add_special_tokens = gr.Checkbox(value=params['add_special_tokens'], label='Add special tokens')
+                stride = gr.Number(value=params['stride'], label='Stride')
+                is_split_into_words = gr.Checkbox(value=params['is_split_into_words'], label='Is split into words')
+                return_attention_mask = gr.Checkbox(value=params['return_attention_mask'], label='Return attention mask')
+                return_token_type_ids = gr.Checkbox(value=params['return_token_type_ids'], label='Return token type ids')
+                return_length = gr.Checkbox(value=params['return_length'], label='Return length')
+                verbose = gr.Checkbox(value=params['verbose'], label='Verbose')
+                use_fast = gr.Checkbox(value=params['use_fast'], label='Use fast tokenizer')
+                add_prefix_space = gr.Checkbox(value=params['add_prefix_space'], label='Add prefix space')
+                do_lower_case = gr.Checkbox(value=params['do_lower_case'], label='Do lower case')
+                strip_accents = gr.Checkbox(value=params['strip_accents'], label='Strip accents')
+                do_basic_tokenize = gr.Checkbox(value=params['do_basic_tokenize'], label='Do basic tokenize')
+                never_split = gr.Textbox(value='', label='Never split', info='List of tokens to never split, separated by spaces.')
+                pad_token = gr.Textbox(value=params['pad_token'], label='Pad token', info='Token to be used for padding.')
                 update_settings = gr.Button('Apply changes')
+
+            with gr.Tab("Manage Embeddings"):
+                delete_embeddings_btn = gr.Button('Delete embeddings')
 
             last_updated = gr.Markdown()
 
     update_file.click(feed_file_into_collector, [file_input, chunk_len, chunk_sep], last_updated, show_progress=False)
     fetch_embeddings_btn.click(fetch_embeddings, [], last_updated, show_progress=False)
-    update_settings.click(apply_settings, [chunk_len], last_updated, show_progress=False)
+    update_settings.click(apply_settings, [model_name, chunk_len, truncation, padding, max_length, batch_size, return_tensors, add_special_tokens, stride, is_split_into_words, return_attention_mask, return_token_type_ids, return_length, verbose, use_fast, add_prefix_space, do_lower_case, strip_accents, do_basic_tokenize, never_split, pad_token], last_updated, show_progress=False)
+    delete_embeddings_btn.click(delete_embeddings_and_respond, [], last_updated, show_progress=False)
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
