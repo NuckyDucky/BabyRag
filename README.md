@@ -93,6 +93,7 @@ These settings provide fine-grained control over the tokenization process, enabl
 - **My Wonderful Husband**, whose unwavering support helped me get through this project with ease. ❤️
 
 ## Proof of Concept:
+All of the bloe images are produced by this RAG concept alone, albiet each one using a different methodology or even a different tokenizer model. 
 ![image](https://github.com/user-attachments/assets/8a918bc2-284b-47fe-815b-5543d5754371)
 ![image](https://github.com/user-attachments/assets/fa69a05e-d81f-45b0-af31-fcfd2c659f34)
 ![image](https://github.com/user-attachments/assets/ec5c2a3d-b4b2-49ba-ad30-6f68da804f6d)
