@@ -98,6 +98,9 @@ All of the bloe images are produced by this RAG concept alone, albiet each one u
 ![image](https://github.com/user-attachments/assets/fa69a05e-d81f-45b0-af31-fcfd2c659f34)
 ![image](https://github.com/user-attachments/assets/ec5c2a3d-b4b2-49ba-ad30-6f68da804f6d)
 ![image](https://github.com/user-attachments/assets/06f25929-03d0-466b-baff-42aa0db36d19)
+### Current Features:
+![image](https://github.com/user-attachments/assets/7e1d7a9c-2d69-4713-a23f-9be9ce4cac3c)
+
 
 
 
