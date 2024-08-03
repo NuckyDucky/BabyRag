@@ -371,130 +371,96 @@ def ui():
     with gr.Accordion("Click for more information...", open=False):
         gr.Markdown("""
                     ## About
-                    This extension processes text or PDF files to generate text embeddings and stores them in a local file.
-                    You can load data and fetch embeddings using the interface below.
-
+                    This extension processes text or PDF files to generate text embeddings and stores them in a local file. You can load data and fetch embeddings using the interface below.
+                    
                     ### Tokenizer Settings
-
-                    - **Model Name**: Select from a variety of pre-trained models like `distilbert-base-uncased`, `bert-base-uncased`, `roberta-base`, `gpt2`, `t5-small`, and `albert-base-v2`. 
-                    - **When to use each model**: 
-                        - `distilbert-base-uncased` is lightweight and fast, suitable for smaller tasks or limited computational resources.
-                        - `bert-base-uncased` offers a balance between performance and accuracy, good for general-purpose use.
-                        - `roberta-base` is robust and handles complex language patterns, ideal for nuanced text analysis.
-                        - `gpt2` generates more coherent text, useful for text generation tasks.
-                        - `t5-small` excels at text-to-text transformations, like summarization or translation.
-                        - `albert-base-v2` is optimized for efficiency and memory, good for scenarios with tight resource constraints.
-
-                    - **Chunk Length**: Specify the length of text chunks to be processed.
-                    - **Impact**: A smaller chunk length can reduce memory usage and ensure that text fits within the model's max length. A larger chunk length can capture more context but may require more memory.
-
-                    - **Truncation**: Enable or disable truncation of text chunks that exceed the maximum length.
-                    - **Impact**: Enabling truncation ensures that text exceeding the max length is cut off, preventing errors. Disabling truncation might cause the model to fail if the text is too long.
-
-                    - **Padding**: Choose padding strategy (`max_length` to pad all sequences to the same length).
-                    - **Impact**: Padding to `max_length` ensures uniform input sizes, which can stabilize model performance. Dynamic padding can save memory when input sizes vary.
-
-                    - **Max Length**: Set the maximum length for text sequences.
-                    - **Impact**: Shorter max length reduces memory usage and processing time but may cut off relevant information. Longer max length captures more context but requires more resources.
-
-                    - **Batch Size**: Define the number of sequences processed at once.
-                    - **Impact**: Larger batch sizes improve throughput but require more memory. Smaller batch sizes reduce memory usage but may increase processing time.
-
-                    - **Return Tensors**: Select the tensor type for returned outputs (`pt`, `tf`, `np`).
-                    - **Impact**: `pt` for PyTorch, `tf` for TensorFlow, and `np` for NumPy. Choose based on your preferred framework for further processing.
-
-                    - **Add Special Tokens**: Include special tokens in the tokenized sequences.
-                    - **Impact**: Special tokens like `[CLS]` and `[SEP]` are necessary for many models to function correctly. Disabling this might be useful for custom tokenization schemes.
-
-                    - **Stride**: Specify the stride for overlapping text chunks.
-                    - **Impact**: A non-zero stride helps in creating overlapping chunks, which can preserve context between chunks but increases the number of chunks processed.
-
-                    - **Is Split Into Words**: Determine if input text is split into words.
-                    - **Impact**: Enable for word-level tokenization, useful for languages or tasks where preserving word boundaries is crucial.
-
-                    - **Return Attention Mask**: Enable the return of attention masks.
-                    - **Impact**: Necessary for models that require attention masks to ignore padding tokens. Disabling can save memory if attention masks are not needed.
-
-                    - **Return Token Type IDs**: Include token type IDs in the output.
-                    - **Impact**: Needed for models handling multiple segments like question-answer pairs. Disabling reduces the size of the returned data.
-
-                    - **Return Length**: Return the length of each sequence.
-                    - **Impact**: Useful for debugging and analysis, enabling this provides additional information about each sequence's length.
-
-                    - **Verbose**: Enable verbose output for debugging.
-                    - **Impact**: Helpful during development for detailed logs, but can be disabled in production to reduce log clutter.
-
-                    - **Use Fast Tokenizer**: Use the fast version of the tokenizer.
-                    - **Impact**: Fast tokenizers significantly speed up tokenization with minimal differences in output, recommended for most cases.
-
-                    - **Add Prefix Space**: Add a space before the first token.
-                    - **Impact**: Useful for certain tokenizers that require space before special tokens. Often used with GPT-2 and similar models.
-
-                    - **Do Lower Case**: Convert all characters to lowercase.
-                    - **Impact**: Ensures uniformity in case-sensitive tasks. Disable if case information is important.
-
-                    - **Strip Accents**: Remove accents from characters.
-                    - **Impact**: Simplifies text by removing accents, useful for languages where accents are not critical to meaning.
-
-                    - **Do Basic Tokenize**: Perform basic tokenization before wordpiece tokenization.
-                    - **Impact**: Basic tokenization splits text into words and punctuation, which is useful for many NLP tasks. Disabling may be useful for pre-tokenized text.
-
-                    - **Never Split**: List of tokens that should never be split.
-                    - **Impact**: Specify tokens like names or special phrases that should remain intact during tokenization. E.g., `["JohnDoe", "New York"]`.
-
-                    - **Pad Token**: Define the token used for padding.
-                    - **Impact**: The padding token can be customized to fit the model's requirements. Common options are `[PAD]`, `0`, or any other token that fits the model's vocabulary.
-
-                    - **Normalize Unicode**: Convert all characters to Unicode NFKC form.
-                    - **Impact**: Ensures consistency in text representation by normalizing characters.
-
-                    - **Remove Stop Words**: Remove common stop words from the text.
-                    - **Impact**: Reduces noise in the text, potentially improving the focus on meaningful words.
-
-                    - **Lemmatize**: Reduce words to their base or root form.
-                    - **Impact**: Ensures consistency by treating different forms of a word as the same token.
-
-                    - **Dynamic Padding**: Use dynamic padding based on the batch's maximum sequence length.
-                    - **Impact**: Saves memory and reduces padding noise by padding only to the length of the longest sequence in a batch.
-
-                    - **Synonym Replacement**: Replace words with their synonyms.
-                    - **Impact**: Increases the diversity of the training data by introducing variations in wording.
-
-                    - **Back Translation**: Translate text to another language and back to the original language.
-                    - **Impact**: Generates paraphrases of the text, further diversifying the training data.
-
-                    - **Cross Encoder Model**: Use a cross-encoder model for embeddings.
-                    - **Impact**: Considers pairs of sentences simultaneously, producing more context-aware embeddings.
-
+                    
+                    - **Model Name**: Select from a variety of pre-trained models like `distilbert-base-uncased`, `bert-base-uncased`, `roberta-base`, `gpt2`, `t5-small`, and `albert-base-v2`.
+                      - **When to use each model**:
+                        - `distilbert-base-uncased`: Lightweight and fast, suitable for smaller tasks or limited computational resources.
+                        - `bert-base-uncased`: Offers a balance between performance and accuracy, good for general-purpose use.
+                        - `roberta-base`: Robust and handles complex language patterns, ideal for nuanced text analysis.
+                        - `gpt2`: Generates more coherent text, useful for text generation tasks.
+                        - `t5-small`: Excels at text-to-text transformations, like summarization or translation.
+                        - `albert-base-v2`: Optimized for efficiency and memory, good for scenarios with tight resource constraints.
+                    
+                    - **Chunk Length**: Specify the length of text chunks to be processed. A smaller chunk length can reduce memory usage, while a larger chunk length can capture more context.
+                    
+                    - **Truncation**: Enable or disable truncation of text chunks that exceed the maximum length. Enabling truncation prevents errors by cutting off long text.
+                    
+                    - **Padding**: Choose padding strategy (`max_length` to pad all sequences to the same length). Padding to `max_length` ensures uniform input sizes.
+                    
+                    - **Max Length**: Set the maximum length for text sequences. Shorter max length reduces memory usage, while longer max length captures more context.
+                    
+                    - **Batch Size**: Define the number of sequences processed at once. Larger batch sizes improve throughput but require more memory.
+                    
+                    - **Return Tensors**: Select the tensor type for returned outputs (`pt` for PyTorch, `tf` for TensorFlow, `np` for NumPy). Choose based on your preferred framework for further processing.
+                    
+                    - **Add Special Tokens**: Include special tokens in the tokenized sequences, necessary for many models to function correctly.
+                    
+                    - **Stride**: Specify the stride for overlapping text chunks. A non-zero stride helps in creating overlapping chunks, preserving context between chunks.
+                    
+                    - **Is Split Into Words**: Determine if input text is split into words. Enable for word-level tokenization, useful for preserving word boundaries.
+                    
+                    - **Return Attention Mask**: Enable the return of attention masks, necessary for models that require attention masks to ignore padding tokens.
+                    
+                    - **Return Token Type IDs**: Include token type IDs in the output, needed for models handling multiple segments like question-answer pairs.
+                    
+                    - **Return Length**: Return the length of each sequence. Useful for debugging and analysis.
+                    
+                    - **Verbose**: Enable verbose output for debugging. Helpful during development for detailed logs.
+                    
+                    - **Use Fast Tokenizer**: Use the fast version of the tokenizer. Fast tokenizers significantly speed up tokenization with minimal differences in output.
+                    
+                    - **Add Prefix Space**: Add a space before the first token. Useful for certain tokenizers that require space before special tokens.
+                    
+                    - **Do Lower Case**: Convert all characters to lowercase. Ensures uniformity in case-sensitive tasks.
+                    
+                    - **Strip Accents**: Remove accents from characters. Simplifies text, useful for languages where accents are not critical to meaning.
+                    
+                    - **Do Basic Tokenize**: Perform basic tokenization before wordpiece tokenization. Splits text into words and punctuation, useful for many NLP tasks.
+                    
+                    - **Never Split**: List of tokens that should never be split. Specify tokens like names or special phrases to remain intact during tokenization.
+                    
+                    - **Pad Token**: Define the token used for padding. The padding token can be customized to fit the model's requirements.
+                    
+                    - **Normalize Unicode**: Convert all characters to Unicode NFKC form. Ensures consistency in text representation by normalizing characters.
+                    
+                    - **Remove Stop Words**: Remove common stop words from the text. Reduces noise in the text, improving focus on meaningful words.
+                    
+                    - **Lemmatize**: Reduce words to their base or root form. Ensures consistency by treating different forms of a word as the same token.
+                    
+                    - **Dynamic Padding**: Use dynamic padding based on the batch's maximum sequence length. Saves memory and reduces padding noise.
+                    
+                    - **Synonym Replacement**: Replace words with their synonyms. Increases the diversity of the training data by introducing variations in wording.
+                    
+                    - **Back Translation**: Translate text to another language and back to the original language. Generates paraphrases of the text, further diversifying the training data.
+                    
+                    - **Cross Encoder Model**: Use a cross-encoder model for embeddings. Considers pairs of sentences simultaneously, producing more context-aware embeddings.
+                    
                     - **Pooling Strategy**: Choose the pooling strategy for generating embeddings.
-                    - **Mean Pooling**: Averages the token embeddings, providing a balanced representation of the text.
-                    - **Max Pooling**: Selects the maximum value across the token embeddings, capturing the most salient features.
-                    - **Weighted Pooling**: Uses learned weights to combine token embeddings, potentially improving representation by emphasizing important tokens.
-
-                    - **Fine Tune**: Fine-tune the model on domain-specific data.
-                    - **Impact**: Improves the model's performance on specific tasks by adapting it to the nuances of the target domain.
-
-                    - **Context Window Size**: Specify the size of the context window for text processing.
-                    - **Impact**: Ensures that important context is captured across chunk boundaries.
-
-                    - **Context Window Stride**: Specify the stride for the context window.
-                    - **Impact**: Controls the overlap between context windows, balancing context retention and processing efficiency.
-
-                    - **Correct Spelling Grammar**: Enable spelling and grammar correction.
-                    - **Impact**: Ensures that the input text is clean and standardized before processing.
-
-                    - **Custom Pretrained Embeddings**: Use custom pre-trained embeddings.
-                    - **Impact**: Boosts performance for specific tasks by leveraging embeddings pre-trained on relevant corpora.
-
+                      - **Mean Pooling**: Averages the token embeddings, providing a balanced representation of the text.
+                      - **Max Pooling**: Selects the maximum value across the token embeddings, capturing the most salient features.
+                      - **Weighted Pooling**: Uses learned weights to combine token embeddings, potentially improving representation by emphasizing important tokens.
+                    
+                    - **Fine Tune**: Fine-tune the model on domain-specific data. Improves the model's performance on specific tasks by adapting it to the nuances of the target domain.
+                    
+                    - **Context Window Size**: Specify the size of the context window for text processing. Ensures that important context is captured across chunk boundaries.
+                    
+                    - **Context Window Stride**: Specify the stride for the context window. Controls the overlap between context windows, balancing context retention and processing efficiency.
+                    
+                    - **Correct Spelling Grammar**: Enable spelling and grammar correction. Ensures the input text is clean and standardized before processing.
+                    
+                    - **Custom Pretrained Embeddings**: Use custom pre-trained embeddings. Boosts performance for specific tasks by leveraging embeddings pre-trained on relevant corpora.
+                    
                     ### Changing Parameters
-
-                    To change the parameters, navigate to the "Settings" tab in the interface. Adjust the settings as needed for your specific use case, keeping the impacts mentioned above in mind. 
-
+                    
+                    To change the parameters, navigate to the "Settings" tab in the interface. Adjust the settings as needed for your specific use case.
+                    
                     - **Example Use Case**: If you're processing a document that includes names and places, add those names and places to the `never_split` parameter to ensure they remain intact.
                     - **Custom Pad Token**: If your model uses a different token for padding, set the `pad_token` parameter accordingly.
-
+                    
                     By understanding and adjusting these settings, you can tailor the text processing to better fit your needs, improving the efficiency and accuracy of your embeddings.
-
                     """)
     with gr.Row():
         with gr.Column(min_width=600):
