@@ -1,7 +1,7 @@
-# 🚀 BabyRag 2.0
+# 🚀 BabyRag v2.0
 
 ## 🌟 Introduction
-Welcome to **BabyRag 2.0**, an enhanced version of the original BabyRag project. This iteration brings significant improvements, including the use of ONNX models for efficient inference, integration with Gradio for an interactive web interface, and enhanced hardware acceleration capabilities leveraging AMD's powerful processing units. BabyRag continues to provide a coherent RAG (Retrieval-Augmented Generation) style infrastructure, enhancing text processing applications with advanced text embedding and retrieval techniques.
+Welcome to **BabyRag v2.0**, an enhanced version of the original BabyRag project. This iteration brings significant improvements, including the use of ONNX models for efficient inference, integration with Gradio for an interactive web interface, and enhanced hardware acceleration capabilities leveraging AMD's powerful processing units. BabyRag continues to provide a coherent RAG (Retrieval-Augmented Generation) style infrastructure, enhancing text processing applications with advanced text embedding and retrieval techniques.
 
 ## 🔥 Features
 - **📝 Text Embedding and Retrieval**: Utilizes ONNX models for generating and retrieving text embeddings, providing faster inference times.
@@ -15,9 +15,9 @@ Welcome to **BabyRag 2.0**, an enhanced version of the original BabyRag project.
 - AMD Ryzen processors or AMD GPUs (recommended for optimal performance)
 
 ### 🧰 Software:
-- Python 3.8+
+- Python 3.11+
 - PyTorch
-- Transformers
+- Transformers (Ryzen 1.1-1.2 AI, see Ryzen AI instructions).
 - ONNX Runtime
 - Gradio
 - Other dependencies listed in `requirements.txt`
