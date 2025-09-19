@@ -1,90 +1,93 @@
-# 🚀 BabyRag v2.0
+# BabyRAG
 
-## 🌟 Introduction
-Welcome to **BabyRag v2.0**, an enhanced version of the original BabyRag project. This iteration brings significant improvements, including the use of ONNX models for efficient inference, integration with Gradio for an interactive web interface, and enhanced hardware acceleration capabilities leveraging AMD's powerful processing units. BabyRag continues to provide a coherent RAG (Retrieval-Augmented Generation) style infrastructure, enhancing text processing applications with advanced text embedding and retrieval techniques.
+BabyRAG is now a lightweight Retrieval Augmented Generation service you can host locally. It exposes HTTP endpoints for
+embedding generation, document ingestion, and completions that ground language-model responses on the ingested corpus.
 
-## 🔥 Features
-- **📝 Text Embedding and Retrieval**: Utilizes ONNX models for generating and retrieving text embeddings, providing faster inference times.
-- **💻 Interactive Gradio Interface**: Implements a Gradio-based web interface for dynamic interaction with the AI.
-- **⚡ Hardware Acceleration**: Leverages AMD hardware, including support for GPU acceleration, for efficient data handling and processing.
-- **🔄 Model Management**: Introduces model selection and loading/unloading capabilities within the interface.
-- **🔧 Hardware Backend Selection**: Automatically selects the optimal hardware backend (CPU or GPU) for running the models.
+The service is framework agnostic: launch it with `python -m babyrag` and interact with it over plain HTTP. No Gradio UI,
+no ONNX runtime – just a minimal stack built on top of PyTorch, Hugging Face Transformers, and FastAPI.
 
-## 🛠️ Hardware and Software Requirements
-### 🖥️ Hardware:
-- AMD Ryzen processors or AMD GPUs (recommended for optimal performance)
+## Features
 
-### 🧰 Software:
-- Python 3.11+
-- PyTorch
-- Transformers (Ryzen 1.1-1.2 AI, see Ryzen AI instructions).
-- ONNX Runtime
-- Gradio
-- Other dependencies listed in `requirements.txt`
+- **Embeddings on demand** – `POST /embeddings` to transform raw text into normalized vector representations using any
+  Hugging Face encoder model.
+- **In-memory vector store** – ingest documents at runtime and retrieve the most relevant passages with cosine similarity.
+- **RAG completions** – `POST /completions` to blend retrieved context with a causal language model and stream-ready
+  completions.
+- **Configurable runtime** – choose the embedding model, completion model, device, and generation parameters via CLI flags
+  or by wiring up your own `Settings` object.
 
-## 📥 Installation Instructions
-_Preinstall: Configure your AMD hardware. For NPU users, this means rebooting into UEFI and enabling the NPU._
+## Installation
 
-1. Clone the repository: `git clone https://github.com/your-repository/BabyRag.git`
-2. Navigate to the project directory: `cd BabyRag`
-3. Install the required Python packages: `pip install -r requirements.txt`
-4. Run the Gradio app: `python babyrag.py`
-5. Access the web interface at `http://localhost:1234` (or the port specified in the code).
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-## 🚀 Usage
+The first run will download the default Hugging Face weights (`sentence-transformers/all-MiniLM-L6-v2` for embeddings and
+`distilgpt2` for generation). Point the CLI at a local directory if you already have the weights.
 
-### Starting the Application
-- Run `python babyrag.py` to start the Gradio interface.
-- The application will automatically detect your hardware capabilities and select the appropriate backend (CPU or GPU).
+## Running the server
 
-### Selecting and Loading Models
-1. **Select Model Folder**: Click on **"Select Model Folder"** to choose the directory where your ONNX models are stored.
-2. **Load a Model**:
-   - Choose a model from the **"Available Models"** dropdown.
-   - Click **"Load Model"** to load the selected model.
-   - The status textbox will display whether the model was loaded successfully.
+```bash
+python -m babyrag --host 0.0.0.0 --port 8000 \
+  --embedding-model sentence-transformers/all-MiniLM-L6-v2 \
+  --completion-model distilgpt2
+```
 
-### Generating Embeddings
-1. Navigate to the **"Embeddings Generator"** section.
-2. Enter the text you want to generate embeddings for in the **"Input Text"** textbox.
-3. Click **"Generate Embeddings"** to obtain the embeddings.
-4. The embeddings will be displayed in the **"Generated Embeddings"** output section.
+The server starts a FastAPI app that listens on `/ingest`, `/embeddings`, and `/completions`.
 
-### Chatting with the Model
-1. Scroll down to the **"Chat with the Model"** section.
-2. In the **"Your Message"** textbox, type your message.
-3. Click **"Send"** to interact with the model.
-4. The conversation will appear in the chatbot interface.
+### Ingest documents
 
-## 🧠 Model Zoo
-[Try Out A Model Today](https://huggingface.co/) (Ensure that your models are converted to ONNX format and stored in the selected model folder.)
+```bash
+curl -X POST http://localhost:8000/ingest \
+  -H "Content-Type: application/json" \
+  -d '{"documents": ["BabyRAG focuses on local-first RAG workflows.", "It exposes embeddings and completion APIs."]}'
+```
 
-## 🔧 Hardware Backend Selection
-The application includes a **HardwareManager** that automatically selects the optimal backend for running the models:
+### Generate embeddings
 
-- **CPU**: Default backend if no GPU is detected.
-- **GPU**: If a compatible GPU is detected (e.g., CUDA-compatible GPU), the application will use it for acceleration.
+```bash
+curl -X POST http://localhost:8000/embeddings \
+  -H "Content-Type: application/json" \
+  -d '{"input": "What is BabyRAG?"}'
+```
 
-*Note*: Support for AMD NPUs or other hardware accelerators may require additional configuration or updates.
+### Request a completion
 
-## 🐞 Known Issues
-1. **Hardware Acceleration Limitations**: Currently, the application supports CPU and CUDA-compatible GPUs. AMD GPU acceleration via ROCm or support for AMD NPUs is not yet implemented.
-2. **Model Compatibility**: Ensure that your models are converted to ONNX format and are compatible with the ONNX Runtime.
-3. **Large Models and Texts**: Processing very large models or lengthy texts may result in increased memory usage and slower performance.
+```bash
+curl -X POST http://localhost:8000/completions \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Explain BabyRAG"}'
+```
 
-## 🙌 Special Thanks
-- **AMD and Hackster.io** for sponsoring this contest!
-- **Oobabooga** for making this web-UI so easy to work with.
-- **FuriousPandas** 🐼 for teaching me everything I know.
-- **My Wonderful Husband**, whose unwavering support helped me get through this project with ease. ❤️
+The pipeline retrieves relevant context from the ingested documents and crafts a prompt for the language model to produce
+an answer. Tweak `top_k`, `max_new_tokens`, or `temperature` in the request body for finer control.
 
-## Proof of Concept
-All of the following images are produced by this RAG concept alone, albeit each one using a different methodology or even a different tokenizer model.
+## Programmatic usage
 
-![image](https://github.com/user-attachments/assets/8a918bc2-284b-47fe-815b-5543d5754371)
-![image](https://github.com/user-attachments/assets/fa69a05e-d81f-45b0-af31-fcfd2c659f34)
-![image](https://github.com/user-attachments/assets/ec5c2a3d-b4b2-49ba-ad30-6f68da804f6d)
-![image](https://github.com/user-attachments/assets/06f25929-03d0-466b-baff-42aa0db36d19)
+If you want to embed text or compose a RAG flow inside another project, you can import the building blocks directly:
 
-### Current Features
-![image](https://github.com/user-attachments/assets/7e1d7a9c-2d69-4713-a23f-9be9ce4cac3c)
+```python
+from babyrag import EmbeddingModel, VectorStore, CompletionModel, RAGPipeline, Settings
+
+settings = Settings()
+embeddings = EmbeddingModel(settings.embedding_model_name)
+completions = CompletionModel(settings.completion_model_name)
+store = VectorStore()
+
+pipeline = RAGPipeline(embeddings, store, completions)
+pipeline.ingest(["BabyRAG answers questions about its ingested context."])
+answer = pipeline.generate("What does BabyRAG do?", top_k=1, max_new_tokens=64, temperature=0.7)
+print(answer.text)
+```
+
+## Development
+
+Run the unit tests before committing changes:
+
+```bash
+pytest
+```
+
+Feel free to replace the default models with local checkpoints optimized for your hardware.
