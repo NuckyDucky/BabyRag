@@ -1,10 +1,4 @@
-Flask
-Gradio
-PyPDF2
-chardet
+fastapi
+uvicorn
 transformers
-numpy
-scikit-learn
 torch
-Werkzeug
-Jinja2
